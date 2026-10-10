@@ -7,7 +7,15 @@ Nền tảng kết nối đồ ăn dư cuối ngày giữa quán ăn và sinh vi
 - Tin tự ẩn khi hết giờ hoặc hết hàng.
 - **Admin** (`/admin`): xem tin 7 ngày gần nhất, xóa tin spam.
 
-Công nghệ: Vite + React + TypeScript, Supabase (Postgres), deploy trên Vercel.
+Công nghệ: Vite + React + TypeScript, đăng trên GitHub Pages: https://fudoyuser.github.io/an-het/
+
+## Chế độ hiện tại: demo, không dùng database
+
+Khi không cấu hình Supabase, tin đăng lưu trên trình duyệt của từng người (localStorage), kèm 4 tin mẫu. Người khác **không** thấy tin bạn đăng. Trang admin bị tắt.
+
+Cập nhật trang web: sửa code → `npm run build` (ra thư mục `docs/`) → commit và push lên `main`. GitHub Pages phục vụ thư mục `docs/`.
+
+Muốn bật database dùng chung (để chủ quán và sinh viên thấy tin của nhau): làm theo các bước Supabase bên dưới, tạo file `.env`, build lại.
 
 ## 1. Tạo database Supabase
 
@@ -29,7 +37,7 @@ npm install
 npm run dev
 ```
 
-## 3. Deploy lên Vercel
+## 3. (Tùy chọn) Deploy lên Vercel thay cho GitHub Pages
 
 1. Vào https://vercel.com → **Add New → Project** → import repo GitHub này.
 2. Framework: **Vite** (tự nhận). Thêm 2 biến môi trường `VITE_SUPABASE_URL` và `VITE_SUPABASE_ANON_KEY`.
@@ -45,6 +53,6 @@ npm run dev
 | Trang | Đường dẫn |
 |---|---|
 | Danh sách tin | `/` |
-| Đăng tin | `/dang-tin` |
-| Quản lý tin (nhập mã) | `/quan-ly` hoặc `/quan-ly?ma=XXXXXXXX` |
-| Admin | `/admin` |
+| Đăng tin | `#/dang-tin` |
+| Quản lý tin (nhập mã) | `#/quan-ly` hoặc `#/quan-ly?ma=XXXXXXXX` |
+| Admin (chỉ khi có database) | `#/admin` |

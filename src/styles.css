@@ -65,6 +65,12 @@ code { background: var(--soft-line); padding: 1px 5px; border-radius: 6px; font-
 .nav a.active { background: var(--sun); border-color: var(--line); }
 
 main { min-height: 70vh; }
+.demo-banner {
+  max-width: 1080px; margin: 12px auto 0; padding: 8px 14px;
+  background: #fff1c7; border: 2px dashed var(--line); border-radius: 12px;
+  font-size: 0.85rem; font-weight: 600; text-align: center;
+  width: calc(100% - 32px);
+}
 
 .page { max-width: 1080px; margin: 0 auto; padding: 16px 16px 96px; }
 .page.narrow { max-width: 560px; }

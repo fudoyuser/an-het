@@ -18,7 +18,7 @@ export default function Post() {
   }
 
   if (done) {
-    const manageUrl = `${window.location.origin}/quan-ly?ma=${done.code}`
+    const manageUrl = `${window.location.origin}${window.location.pathname}#/quan-ly?ma=${done.code}`
     return (
       <div className="page narrow">
         <div className="card success">

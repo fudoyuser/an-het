@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { localActiveListings, localCreate, localDelete, localGet, localUpdate } from './localStore'
 
 export type Listing = {
   id: string
@@ -22,6 +23,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   CODE_NOT_FOUND: 'Không tìm thấy tin với mã này. Kiểm tra lại mã nhé!',
   NOT_ADMIN: 'Sai mật khẩu admin.',
   NOT_CONFIGURED: 'Website chưa được kết nối database.',
+  STORAGE_BLOCKED: 'Trình duyệt đang chặn lưu dữ liệu (chế độ ẩn danh?). Thử trình duyệt thường nhé.',
 }
 
 export function friendlyError(e: unknown): string {
@@ -59,24 +61,29 @@ function toParams(input: ListingInput) {
 }
 
 export async function fetchActiveListings(): Promise<Listing[]> {
+  if (!supabase) return localActiveListings()
   return (await call<Listing[]>('get_active_listings')) ?? []
 }
 
 export async function createListing(input: ListingInput): Promise<{ id: string; manage_code: string }> {
+  if (!supabase) return localCreate(input)
   const rows = await call<{ id: string; manage_code: string }[]>('create_listing', toParams(input))
   return rows[0]
 }
 
 export async function getMyListing(code: string): Promise<Listing | null> {
+  if (!supabase) return localGet(code)
   const rows = await call<Listing[]>('get_my_listing', { p_code: code })
   return rows?.[0] ?? null
 }
 
 export async function updateMyListing(code: string, input: ListingInput): Promise<void> {
+  if (!supabase) return localUpdate(code, input)
   await call('update_my_listing', { p_code: code, ...toParams(input) })
 }
 
 export async function deleteMyListing(code: string): Promise<void> {
+  if (!supabase) return localDelete(code)
   await call('delete_my_listing', { p_code: code })
 }
 

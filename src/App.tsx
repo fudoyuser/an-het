@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { isConfigured } from './lib/supabase'
 import Home from './pages/Home'
 import Post from './pages/Post'
@@ -25,23 +25,10 @@ function Logo() {
   )
 }
 
-function NotConfigured() {
-  return (
-    <div className="page narrow">
-      <div className="card empty">
-        <div className="empty-emoji">🔌</div>
-        <p className="empty-title">Chưa kết nối database</p>
-        <p>
-          Thiếu biến môi trường <code>VITE_SUPABASE_URL</code> và <code>VITE_SUPABASE_ANON_KEY</code>. Xem README.md để cấu hình.
-        </p>
-      </div>
-    </div>
-  )
-}
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollToTop />
       <header className="topbar">
         <div className="topbar-inner">
@@ -55,17 +42,18 @@ export default function App() {
       </header>
 
       <main>
-        {isConfigured ? (
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/dang-tin" element={<Post />} />
-            <Route path="/quan-ly" element={<Manage />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="*" element={<Home />} />
-          </Routes>
-        ) : (
-          <NotConfigured />
+        {!isConfigured && (
+          <div className="demo-banner">
+            🧪 Bản demo: tin bạn đăng chỉ lưu trên máy này, người khác chưa xem được.
+          </div>
         )}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/dang-tin" element={<Post />} />
+          <Route path="/quan-ly" element={<Manage />} />
+          {isConfigured && <Route path="/admin" element={<Admin />} />}
+          <Route path="*" element={<Home />} />
+        </Routes>
       </main>
 
       <footer className="footer">
@@ -73,6 +61,6 @@ export default function App() {
         <br />
         Bản thí điểm · Dự án khởi nghiệp xanh của sinh viên
       </footer>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
