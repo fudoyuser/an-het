@@ -1,21 +1,764 @@
 <!doctype html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#FF5B2E" />
-    <title>ĂN HẾT — Đồ ngon cuối ngày, giá hời</title>
-    <meta name="description" content="Quán quanh trường còn dư đồ ăn cuối ngày? Giảm giá cho sinh viên. Ăn hết, không bỏ phí!" />
-    <meta property="og:title" content="ĂN HẾT — Đồ ngon cuối ngày, giá hời" />
-    <meta property="og:description" content="Xem quán nào đang giảm giá đồ ăn cuối ngày quanh trường. Ăn hết, không bỏ phí!" />
-    <meta property="og:type" content="website" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FF5B2E">
+<title>ĂN HẾT — Đồ ngon cuối ngày, giá hời</title>
+<meta name="description" content="Quán quanh trường còn dư đồ ăn cuối ngày? Giảm giá cho sinh viên. Ăn hết, không bỏ phí!">
+<meta property="og:title" content="ĂN HẾT — Đồ ngon cuối ngày, giá hời">
+<meta property="og:description" content="Xem quán nào đang giảm giá đồ ăn cuối ngày quanh trường. Ăn hết, không bỏ phí!">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FF5B2E'/%3E%3Cpath d='M12 30h40a20 20 0 0 1-40 0z' fill='%23FFF8EE' stroke='%2323180F' stroke-width='3'/%3E%3Cpath d='M24 22c0-4 4-4 4-8M34 22c0-4 4-4 4-8' stroke='%23FFC93C' stroke-width='3.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fff6e9;
+    --surface: #ffffff;
+    --ink: #23180f;
+    --muted: #6f6256;
+    --line: #23180f;
+    --soft-line: #f0e0c8;
+    --primary: #ff5b2e;
+    --primary-dark: #e2441a;
+    --sun: #ffc93c;
+    --leaf: #17a868;
+    --leaf-soft: #ddf6e8;
+    --zalo: #0068ff;
+    --danger: #e5383b;
+    --radius: 18px;
+    --shadow: 3px 3px 0 var(--ink);
+    --shadow-lg: 5px 5px 0 var(--ink);
+    --font-head: 'Baloo 2', 'Be Vietnam Pro', system-ui, sans-serif;
+    --font-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg);
+    background-image: radial-gradient(#f4dcb8 1.2px, transparent 1.2px); background-size: 22px 22px;
+    color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+
+  /* Header */
+  .topbar { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 2px solid var(--line); }
+  .topbar-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px; }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; font-family: var(--font-head); font-weight: 800; font-size: 1.45rem; letter-spacing: .5px; line-height: 1; }
+  .logo span { transform: translateY(2px); }
+  .nav { display: flex; gap: 4px; }
+  .nav a { text-decoration: none; font-weight: 600; font-size: .88rem; padding: 6px 10px; border-radius: 999px; border: 2px solid transparent; white-space: nowrap; }
+  .nav a.active { background: var(--sun); border-color: var(--line); }
+
+  main { min-height: 70vh; }
+  .demo-banner { max-width: 1080px; width: calc(100% - 32px); margin: 12px auto 0; padding: 8px 14px; background: #fff1c7; border: 2px dashed var(--line); border-radius: 12px; font-size: .85rem; font-weight: 600; text-align: center; }
+  .page { max-width: 1080px; margin: 0 auto; padding: 16px 16px 96px; }
+  .page.narrow { max-width: 560px; }
+  .page-head { margin: 8px 0 16px; }
+  .page-head h1 { font-family: var(--font-head); font-size: 1.9rem; line-height: 1.15; margin: 0 0 4px; }
+  .page-head p { margin: 0; color: var(--muted); }
+  .h2 { font-family: var(--font-head); font-size: 1.3rem; margin: 0 0 12px; }
+
+  /* Hero */
+  .hero { padding: 8px 0 4px; }
+  .hero h1 { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.9rem, 7vw, 3rem); line-height: 1.08; margin: 4px 0 8px; }
+  .hl { background: var(--sun); padding: 0 8px; border-radius: 10px; border: 2px solid var(--line); display: inline-block; transform: rotate(-2deg); }
+  .hero p { margin: 0 0 12px; color: var(--muted); max-width: 520px; }
+  .stat { display: inline-flex; align-items: center; gap: 8px; background: var(--leaf-soft); border: 2px solid var(--line); border-radius: 999px; padding: 4px 14px 4px 6px; font-weight: 600; font-size: .92rem; }
+  .stat-num { background: var(--leaf); color: #fff; border-radius: 999px; padding: 0 10px; font-family: var(--font-head); font-size: 1.1rem; }
+
+  /* Chips */
+  .filters { margin: 18px 0 14px; }
+  .filter-label { font-size: .8rem; font-weight: 700; color: var(--muted); margin: 10px 0 6px; text-transform: uppercase; letter-spacing: .5px; }
+  .chips { display: flex; gap: 8px; }
+  .chips.wrap { flex-wrap: wrap; }
+  .chips.scroll { overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 2px 16px 6px; }
+  .chips.scroll::-webkit-scrollbar { display: none; }
+  .chip { flex: none; font: inherit; font-size: .9rem; font-weight: 600; background: var(--surface); color: var(--ink); border: 2px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: transform .08s; }
+  .chip:active { transform: scale(.96); }
+  .chip.active { background: var(--primary); color: #fff; box-shadow: 2px 2px 0 var(--ink); }
+  .count { font-size: .75rem; background: var(--soft-line); color: var(--ink); border-radius: 999px; padding: 0 7px; min-width: 20px; text-align: center; }
+  .chip.active .count { background: rgba(255,255,255,.3); color: #fff; }
+
+  /* Cards */
+  .card { background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 16px; margin-bottom: 16px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .grid .card { margin-bottom: 0; }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .listing { display: flex; flex-direction: column; gap: 6px; }
+  .listing-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .badge-discount { background: var(--primary); color: #fff; font-family: var(--font-head); font-weight: 800; font-size: 1.05rem; padding: 0 10px; border-radius: 10px; border: 2px solid var(--line); transform: rotate(-3deg); }
+  .countdown { font-size: .85rem; font-weight: 700; background: var(--leaf-soft); color: #0d6b41; padding: 3px 10px; border-radius: 999px; }
+  .countdown.urgent { background: #ffe1d6; color: var(--primary-dark); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .6; } }
+  @media (prefers-reduced-motion: reduce) { .countdown.urgent { animation: none; } }
+  .dish { font-family: var(--font-head); font-size: 1.35rem; line-height: 1.2; margin: 6px 0 0; }
+  .shop { margin: 0; color: var(--muted); font-weight: 500; }
+  .prices { display: flex; align-items: baseline; gap: 10px; }
+  .price-new { font-family: var(--font-head); font-weight: 800; font-size: 1.6rem; color: var(--primary-dark); }
+  .price-old { text-decoration: line-through; color: var(--muted); }
+  .meta { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .92rem; }
+  .address { margin: 2px 0 6px; font-size: .92rem; color: var(--muted); }
+  .chip-area { display: inline-block; background: var(--sun); color: var(--ink); font-size: .78rem; font-weight: 700; padding: 1px 8px; border-radius: 999px; margin-right: 4px; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: auto; }
+  .actions .btn { white-space: nowrap; padding: 10px 6px; }
+
+  /* Buttons */
+  .btn { font: inherit; font-weight: 700; font-size: .95rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; box-shadow: var(--shadow); transition: transform .08s, box-shadow .08s; min-height: 44px; }
+  .btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-zalo { background: var(--zalo); color: #fff; }
+  .btn-sun { background: var(--sun); }
+  .btn-danger { background: #fff; color: var(--danger); border-color: var(--danger); box-shadow: 3px 3px 0 var(--danger); }
+  .btn-link { background: none; border: none; box-shadow: none; text-decoration: underline; }
+  .btn-lg { font-size: 1.1rem; padding: 14px 18px; }
+  .btn-sm { min-height: 36px; padding: 6px 12px; font-size: .85rem; }
+  .btn-block { width: 100%; }
+  .stack { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .fab { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 30; background: var(--primary); color: #fff; text-decoration: none; font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; padding: 10px 20px; border-radius: 999px; border: 2px solid var(--line); box-shadow: var(--shadow-lg); }
+  .owner-cta { margin-top: 28px; display: flex; flex-direction: column; gap: 12px; background: var(--sun); }
+  .owner-cta p { margin: 4px 0 0; }
+  @media (min-width: 640px) { .owner-cta { flex-direction: row; align-items: center; justify-content: space-between; } }
+
+  /* Form */
+  .form { display: flex; flex-direction: column; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field > span { font-weight: 700; font-size: .92rem; }
+  .field input { font: inherit; font-size: 16px; padding: 11px 14px; border-radius: 12px; border: 2px solid var(--line); background: #fffdf9; color: var(--ink); width: 100%; min-height: 46px; }
+  .field input:focus { outline: 3px solid var(--sun); outline-offset: 1px; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .expiry-row { display: flex; flex-direction: column; gap: 8px; }
+  .expiry-row input { max-width: 160px; }
+  .hint { color: var(--muted); font-size: .82rem; }
+  .hint-good { color: var(--leaf); font-weight: 600; }
+  .hint-warn { color: var(--primary-dark); font-weight: 600; }
+  .field-error { color: var(--danger); font-size: .85rem; font-weight: 600; margin: 0; }
+  .field-error:empty { display: none; }
+  .code-input { font-family: ui-monospace, monospace; letter-spacing: 3px; text-transform: uppercase; font-size: 1.2rem !important; }
+
+  /* States */
+  .alert { border: 2px solid var(--line); border-radius: 14px; padding: 10px 14px; margin: 0 0 14px; font-size: .92rem; }
+  .alert-error { background: #ffe3e3; }
+  .alert-warn { background: #fff1c7; }
+  .alert-info { background: var(--leaf-soft); }
+  .status { display: inline-block; margin-top: 8px; font-size: .82rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 2px solid var(--line); }
+  .status-on { background: var(--leaf-soft); color: #0d6b41; }
+  .status-off { background: #eee5da; color: var(--muted); }
+  .empty { text-align: center; padding: 36px 16px; }
+  .empty-emoji { font-size: 3rem; }
+  .empty-title { font-family: var(--font-head); font-size: 1.3rem; margin: 6px 0; }
+  .empty p { color: var(--muted); }
+  .empty .stack { align-items: center; }
+  .success { text-align: center; }
+  .success h1 { font-family: var(--font-head); margin: 0; font-size: 1.8rem; }
+  .success-emoji { font-size: 3.2rem; }
+  .success .alert { text-align: left; }
+  .code-box { display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--bg); border: 2px dashed var(--line); border-radius: 16px; padding: 14px; margin: 16px 0; }
+  .code-label { font-size: .8rem; font-weight: 700; text-transform: uppercase; color: var(--muted); }
+  .code { font-family: ui-monospace, monospace; font-size: 2rem; font-weight: 800; letter-spacing: 4px; }
+  .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .saved-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .saved-list a { display: flex; flex-direction: column; text-decoration: none; padding: 10px 12px; border: 2px solid var(--soft-line); border-radius: 12px; }
+  .saved-list small { color: var(--muted); }
+  .footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 24px 16px 96px; border-top: 2px dashed var(--soft-line); }
+  @media (max-width: 380px) {
+    .logo { font-size: 1.2rem; }
+    .logo svg { width: 28px; height: 28px; }
+    .nav a { padding: 5px 7px; font-size: .8rem; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#/" class="logo" aria-label="ĂN HẾT - trang chủ">
+      <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="#FF5B2E"/>
+        <path d="M12 30h40a20 20 0 0 1-40 0z" fill="#FFF8EE" stroke="#23180F" stroke-width="3"/>
+        <path d="M24 22c0-4 4-4 4-8M34 22c0-4 4-4 4-8" stroke="#FFC93C" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>ĂN HẾT</span>
+    </a>
+    <nav class="nav">
+      <a href="#/" data-nav="home">Săn đồ</a>
+      <a href="#/dang-tin" data-nav="post">Đăng tin</a>
+      <a href="#/quan-ly" data-nav="manage">Quản lý</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="demo-banner">🧪 Bản demo: tin bạn đăng chỉ lưu trên máy này, người khác chưa xem được.</div>
+  <div id="app"></div>
+</main>
+
+<footer class="footer">
+  <b>ĂN HẾT</b> · Ăn hết đồ ngon, không để lãng phí 🌱<br>
+  Bản thí điểm · Dự án khởi nghiệp xanh của sinh viên
+</footer>
+
+<script>
+// ================= Cấu hình =================
+// Danh sách khu vực: sửa lại cho đúng các khu vực quanh trường.
+const AREAS = ['Cổng chính', 'Cổng phụ / cổng sau', 'Khu ký túc xá', 'Phố ăn vặt gần trường', 'Khu vực khác'];
+const TIME_FILTERS = [
+  { label: 'Tất cả', minutes: 0 },
+  { label: 'Còn ≥ 30 phút', minutes: 30 },
+  { label: 'Còn ≥ 1 tiếng', minutes: 60 },
+  { label: 'Còn ≥ 2 tiếng', minutes: 120 },
+];
+const MIN_EXPIRY_MIN = 10;   // tin phải còn hiệu lực ít nhất 10 phút khi đăng
+const MAX_EXPIRY_H = 24;     // và tối đa 24 tiếng
+
+// ================= Tiện ích =================
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = (n) => String(n).padStart(2, '0');
+const formatVND = (n) => n.toLocaleString('vi-VN') + 'đ';
+const discountPercent = (o, d) => (o > 0 ? Math.round((1 - d / o) * 100) : 0);
+const formatClock = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const digitsOnly = (s) => s.replace(/\D/g, '');
+const normalizeCode = (s) => s.toUpperCase().replace(/[^A-Z0-9]/g, '');
+const displayCode = (c) => (c.length === 8 ? `${c.slice(0, 4)}-${c.slice(4)}` : c);
+
+function dayLabel(d, now) {
+  const day = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diff = Math.round((day(d) - day(now)) / 86400000);
+  return diff === 0 ? 'hôm nay' : diff === 1 ? 'ngày mai' : diff === -1 ? 'hôm qua' : d.toLocaleDateString('vi-VN');
+}
+
+function formatTimeLeft(ms) {
+  if (ms <= 0) return 'Hết giờ';
+  const total = Math.floor(ms / 60000);
+  if (total < 1) return 'Còn < 1 phút';
+  const h = Math.floor(total / 60), m = total % 60;
+  if (h === 0) return `Còn ${m} phút`;
+  return m === 0 ? `Còn ${h} tiếng` : `Còn ${h}g ${m}p`;
+}
+
+// "21:30" -> thời điểm gần nhất trong tương lai (hôm nay, hoặc ngày mai nếu giờ đó đã qua)
+function timeInputToDate(value, now) {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(value);
+  if (!m) return null;
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), +m[1], +m[2]);
+  if (d <= now) d.setDate(d.getDate() + 1);
+  return d;
+}
+
+function normalizePhone(raw) {
+  let p = raw.replace(/[^\d+]/g, '');
+  if (p.startsWith('+84')) p = '0' + p.slice(3);
+  else if (p.startsWith('84') && p.length === 11) p = '0' + p.slice(2);
+  return p.replace(/\D/g, '');
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  }
+}
+
+// ================= Lưu trữ (trên trình duyệt) =================
+const STORE_KEY = 'anhet.localListings';
+const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // bỏ I, O, 0, 1 cho dễ đọc
+
+const ERRORS = {
+  EXPIRES_TOO_SOON: `Giờ hết hiệu lực phải cách bây giờ ít nhất ${MIN_EXPIRY_MIN} phút.`,
+  EXPIRES_TOO_LATE: `Tin chỉ được đăng tối đa ${MAX_EXPIRY_H} tiếng.`,
+  CODE_NOT_FOUND: 'Không tìm thấy tin với mã này. Kiểm tra lại mã nhé!',
+  STORAGE_BLOCKED: 'Trình duyệt đang chặn lưu dữ liệu (chế độ ẩn danh?). Thử trình duyệt thường nhé.',
+};
+const friendlyError = (e) => ERRORS[e && e.message] || 'Có lỗi xảy ra, bạn thử lại nhé.';
+
+function readStore() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(STORE_KEY) || '[]');
+    return Array.isArray(arr) ? arr : [];
+  } catch { return []; }
+}
+function writeStore(list) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); }
+  catch { throw new Error('STORAGE_BLOCKED'); }
+}
+function genCode() {
+  const bytes = crypto.getRandomValues(new Uint8Array(8));
+  return Array.from(bytes, (b) => CODE_ALPHABET[b % 32]).join('');
+}
+function checkExpiry(iso) {
+  const ms = new Date(iso) - Date.now();
+  if (ms < MIN_EXPIRY_MIN * 60000) throw new Error('EXPIRES_TOO_SOON');
+  if (ms > MAX_EXPIRY_H * 3600000) throw new Error('EXPIRES_TOO_LATE');
+}
+
+// Tin mẫu: giờ hết hạn neo theo đầu giờ hiện tại nên đếm ngược vẫn chạy đúng
+function demoListings() {
+  const anchor = new Date(); anchor.setMinutes(0, 0, 0);
+  const at = (min) => new Date(anchor.getTime() + min * 60000).toISOString();
+  return [
+    ['Bánh mì Cô Ba', 'Bánh mì pate trứng', 8, 25000, 12000, 'Cổng chính', 'Số 12 ngõ 30, cạnh tiệm photo', '0912345678', 105],
+    ['Tiệm bánh Mây', 'Bánh su kem (hộp 6 cái)', 12, 60000, 30000, 'Phố ăn vặt gần trường', '8 phố Ăn Vặt', '0901234567', 150],
+    ['Cơm tấm Sườn Ngon', 'Cơm sườn bì chả', 5, 45000, 25000, 'Khu ký túc xá', '45 đường KTX, đối diện nhà B', '0987654321', 210],
+    ['Bún chả Hà Thành', 'Bún chả suất thường', 3, 40000, 28000, 'Cổng phụ / cổng sau', 'Ngõ 5 cổng sau', '0934567890', 270],
+  ].map(([shop_name, dish_name, quantity, original_price, discount_price, area, address, contact_phone, min], i) => ({
+    id: 'demo-' + (i + 1), shop_name, dish_name, quantity, original_price, discount_price,
+    area, address, contact_phone, expires_at: at(min), created_at: anchor.toISOString(),
+  }));
+}
+
+const api = {
+  active() {
+    const now = Date.now();
+    return [...readStore(), ...demoListings()]
+      .filter((l) => new Date(l.expires_at) > now && l.quantity > 0)
+      .sort((a, b) => a.expires_at.localeCompare(b.expires_at));
+  },
+  create(input) {
+    checkExpiry(input.expires_at);
+    const code = genCode();
+    // Dọn tin đã hết hạn quá 2 ngày
+    const keep = readStore().filter((l) => new Date(l.expires_at) > Date.now() - 2 * 86400000);
+    writeStore([...keep, { ...input, id: crypto.randomUUID(), created_at: new Date().toISOString(), code }]);
+    return code;
+  },
+  get(code) { return readStore().find((l) => l.code === code) || null; },
+  update(code, input) {
+    const list = readStore();
+    const i = list.findIndex((l) => l.code === code);
+    if (i < 0) throw new Error('CODE_NOT_FOUND');
+    if (input.expires_at !== list[i].expires_at) checkExpiry(input.expires_at);
+    list[i] = { ...list[i], ...input };
+    writeStore(list);
+  },
+  remove(code) {
+    const list = readStore();
+    if (!list.some((l) => l.code === code)) throw new Error('CODE_NOT_FOUND');
+    writeStore(list.filter((l) => l.code !== code));
+  },
+};
+
+// ================= Trang chủ =================
+const homeState = { area: null, minMinutes: 0 };
+
+function listingCard(l, now) {
+  const exp = new Date(l.expires_at);
+  const msLeft = exp - now;
+  const day = dayLabel(exp, now);
+  const mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(`${l.shop_name} ${l.address}`);
+  return `
+    <article class="card listing">
+      <div class="listing-top">
+        <span class="badge-discount">-${discountPercent(l.original_price, l.discount_price)}%</span>
+        <span class="countdown ${msLeft < 30 * 60000 ? 'urgent' : ''}">⏰ ${formatTimeLeft(msLeft)}</span>
+      </div>
+      <h3 class="dish">${esc(l.dish_name)}</h3>
+      <p class="shop">🏪 ${esc(l.shop_name)}</p>
+      <div class="prices">
+        <span class="price-new">${formatVND(l.discount_price)}</span>
+        <span class="price-old">${formatVND(l.original_price)}</span>
+      </div>
+      <ul class="meta">
+        <li><strong>Còn ${l.quantity} suất</strong></li>
+        <li>Đến ${formatClock(exp)}${day !== 'hôm nay' ? ' ' + day : ''}</li>
+      </ul>
+      <p class="address"><span class="chip-area">${esc(l.area)}</span> ${esc(l.address)}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="tel:${esc(l.contact_phone)}">📞 Gọi</a>
+        <a class="btn btn-zalo" href="https://zalo.me/${esc(l.contact_phone)}" target="_blank" rel="noreferrer">Zalo</a>
+        <a class="btn" href="${mapUrl}" target="_blank" rel="noreferrer">📍 Đường</a>
+      </div>
+    </article>`;
+}
+
+function renderHome() {
+  const now = new Date();
+  const live = api.active();
+  const byTime = live.filter((l) => new Date(l.expires_at) - now >= homeState.minMinutes * 60000);
+  const visible = homeState.area ? byTime.filter((l) => l.area === homeState.area) : byTime;
+  const total = live.reduce((s, l) => s + l.quantity, 0);
+  const areas = [...AREAS, ...new Set(live.map((l) => l.area).filter((a) => !AREAS.includes(a)))];
+  const chip = (active, attrs, label) => `<button class="chip ${active ? 'active' : ''}" ${attrs}>${label}</button>`;
+
+  let list;
+  if (visible.length) {
+    list = `<div class="grid">${visible.map((l) => listingCard(l, now)).join('')}</div>`;
+  } else if (!live.length) {
+    list = `<div class="empty"><div class="empty-emoji">🍽️</div>
+      <p class="empty-title">Chưa có quán nào đăng tin lúc này</p>
+      <p>Có thể các quán đã bán sạch rồi! Quay lại vào buổi tối nhé.</p></div>`;
+  } else {
+    list = `<div class="empty"><div class="empty-emoji">🔍</div>
+      <p class="empty-title">Không có món nào khớp bộ lọc</p>
+      <button class="btn" data-reset>Xem tất cả</button></div>`;
+  }
+
+  // Giữ vị trí cuộn ngang của các hàng chip khi vẽ lại
+  const scrolls = $$('.chips.scroll', app).map((c) => c.scrollLeft);
+  app.innerHTML = `
+    <div class="page">
+      <section class="hero">
+        <h1>Đồ ngon cuối ngày,<br><span class="hl">giá hời</span> cho sinh viên!</h1>
+        <p>Quán quanh trường còn dư đồ ăn? Ghé mua giá rẻ. Ăn hết, không bỏ phí 🌱</p>
+        <div class="stat"><span class="stat-num">${total}</span> suất đang chờ được ăn hết</div>
+      </section>
+      <section class="filters" aria-label="Bộ lọc">
+        <div class="filter-label">📍 Khu vực</div>
+        <div class="chips scroll">
+          ${chip(homeState.area === null, 'data-area=""', `Tất cả <span class="count">${byTime.length}</span>`)}
+          ${areas.map((a) => chip(homeState.area === a, `data-area="${esc(a)}"`, `${esc(a)} <span class="count">${byTime.filter((l) => l.area === a).length}</span>`)).join('')}
+        </div>
+        <div class="filter-label">⏰ Thời gian còn lại</div>
+        <div class="chips scroll">
+          ${TIME_FILTERS.map((t) => chip(homeState.minMinutes === t.minutes, `data-min="${t.minutes}"`, t.label)).join('')}
+        </div>
+      </section>
+      ${list}
+      <section class="owner-cta card">
+        <div><b>Bạn là chủ quán?</b>
+          <p>Còn đồ dư cuối ngày? Đăng tin trong 1 phút, miễn phí, không cần tài khoản.</p></div>
+        <a class="btn btn-primary" href="#/dang-tin">Đăng tin ngay</a>
+      </section>
+      <a class="fab" href="#/dang-tin" aria-label="Đăng tin">＋ Đăng tin</a>
+    </div>`;
+
+  $$('.chips.scroll', app).forEach((c, i) => (c.scrollLeft = scrolls[i] || 0));
+  $$('[data-area]').forEach((b) => b.onclick = () => { homeState.area = b.dataset.area || null; renderHome(); });
+  $$('[data-min]').forEach((b) => b.onclick = () => { homeState.minMinutes = +b.dataset.min; renderHome(); });
+  const reset = $('[data-reset]');
+  if (reset) reset.onclick = () => { homeState.area = null; homeState.minMinutes = 0; renderHome(); };
+}
+
+// ================= Form đăng / sửa tin =================
+function formHTML(l, submitLabel) {
+  const v = (k) => (l ? esc(l[k]) : '');
+  return `
+    <form class="form" novalidate>
+      <label class="field"><span>Tên quán</span>
+        <input name="shop_name" value="${v('shop_name')}" maxlength="80" placeholder="VD: Bánh mì Cô Ba">
+        <p class="field-error" data-err="shop_name"></p></label>
+      <label class="field"><span>Tên món</span>
+        <input name="dish_name" value="${v('dish_name')}" maxlength="100" placeholder="VD: Bánh mì pate trứng">
+        <p class="field-error" data-err="dish_name"></p></label>
+      <div class="row-2">
+        <label class="field"><span>Giá gốc (đ)</span>
+          <input name="original_price" inputmode="numeric" value="${v('original_price')}" placeholder="30000">
+          <small class="hint" data-hint="original_price"></small>
+          <p class="field-error" data-err="original_price"></p></label>
+        <label class="field"><span>Giá giảm (đ)</span>
+          <input name="discount_price" inputmode="numeric" value="${v('discount_price')}" placeholder="15000">
+          <small class="hint hint-good" data-hint="discount_price"></small>
+          <p class="field-error" data-err="discount_price"></p></label>
+      </div>
+      <label class="field"><span>Số lượng còn (suất)</span>
+        <input name="quantity" inputmode="numeric" value="${v('quantity')}" placeholder="10">
+        <p class="field-error" data-err="quantity"></p></label>
+      <div class="field"><span>Khu vực</span>
+        <div class="chips wrap">
+          ${AREAS.map((a) => `<button type="button" class="chip ${l && l.area === a ? 'active' : ''}" data-pick-area="${esc(a)}">${esc(a)}</button>`).join('')}
+        </div>
+        <p class="field-error" data-err="area"></p></div>
+      <label class="field"><span>Địa chỉ cụ thể</span>
+        <input name="address" value="${v('address')}" maxlength="200" placeholder="VD: Số 12 ngõ 30, cạnh tiệm photo">
+        <p class="field-error" data-err="address"></p></label>
+      <div class="field"><span>Còn hiệu lực đến</span>
+        <div class="expiry-row">
+          <input type="time" name="expiry" value="${l ? formatClock(new Date(l.expires_at)) : ''}">
+          <div class="chips">
+            <button type="button" class="chip" data-add-h="1">+1 tiếng</button>
+            <button type="button" class="chip" data-add-h="2">+2 tiếng</button>
+            <button type="button" class="chip" data-add-h="3">+3 tiếng</button>
+          </div>
+        </div>
+        <small class="hint" data-hint="expiry"></small>
+        <p class="field-error" data-err="expiry"></p></div>
+      <label class="field"><span>Số điện thoại / Zalo</span>
+        <input name="contact_phone" type="tel" inputmode="tel" value="${v('contact_phone')}" placeholder="0912345678">
+        <p class="field-error" data-err="contact_phone"></p></label>
+      <p class="alert alert-error" data-submit-error hidden></p>
+      <button class="btn btn-primary btn-lg btn-block" type="submit">${submitLabel}</button>
+    </form>`;
+}
+
+// Gắn logic cho form. initial: tin đang sửa (nếu có). onSubmit(input) có thể throw.
+function bindForm(form, initial, onSubmit) {
+  let area = initial ? initial.area : '';
+  let expiryTouched = !initial; // sửa tin mà không đổi giờ thì giữ nguyên giờ hết hạn cũ
+  const f = (n) => form.elements[n];
+  const hint = (k) => $(`[data-hint="${k}"]`, form);
+
+  const expiresAt = () => {
+    if (!expiryTouched) return initial ? new Date(initial.expires_at) : null;
+    return timeInputToDate(f('expiry').value, new Date());
+  };
+
+  function updateHints() {
+    const now = new Date();
+    const o = +f('original_price').value || 0;
+    const d = f('discount_price').value;
+    hint('original_price').textContent = o > 0 ? formatVND(o) : '';
+    hint('discount_price').textContent = o > 0 && d !== '' && +d < o ? `${formatVND(+d)} · giảm ${discountPercent(o, +d)}%` : '';
+    const e = expiresAt();
+    const h = hint('expiry');
+    if (initial && !expiryTouched && e <= now) {
+      h.className = 'hint hint-warn';
+      h.textContent = 'Tin đã hết hạn. Chọn giờ mới để tin hiện lại.';
+    } else {
+      h.className = 'hint';
+      h.innerHTML = e ? `Tin tự ẩn lúc <b>${formatClock(e)} ${dayLabel(e, now)}</b> (${formatTimeLeft(e - now).toLowerCase()})` : '';
+    }
+  }
+
+  ['original_price', 'discount_price', 'quantity'].forEach((n) =>
+    f(n).addEventListener('input', () => { f(n).value = digitsOnly(f(n).value); updateHints(); }));
+  f('expiry').addEventListener('input', () => { expiryTouched = true; updateHints(); });
+  $$('[data-add-h]', form).forEach((b) => b.onclick = () => {
+    const d = new Date(Date.now() + +b.dataset.addH * 3600000);
+    d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5, 0, 0);
+    f('expiry').value = formatClock(d);
+    expiryTouched = true;
+    updateHints();
+  });
+  $$('[data-pick-area]', form).forEach((b) => b.onclick = () => {
+    area = b.dataset.pickArea;
+    $$('[data-pick-area]', form).forEach((x) => x.classList.toggle('active', x === b));
+  });
+  const timer = setInterval(() => (document.body.contains(form) ? updateHints() : clearInterval(timer)), 15000);
+  updateHints();
+
+  function validate() {
+    const e = {};
+    const now = new Date();
+    const o = +f('original_price').value || 0;
+    const d = f('discount_price').value;
+    const q = f('quantity').value;
+    if (f('shop_name').value.trim().length < 2) e.shop_name = 'Nhập tên quán nhé';
+    if (f('dish_name').value.trim().length < 2) e.dish_name = 'Nhập tên món nhé';
+    if (q === '' || +q > 999) e.quantity = 'Số lượng từ 0 đến 999';
+    if (o < 1000) e.original_price = 'Giá gốc tối thiểu 1.000đ';
+    else if (o > 10000000) e.original_price = 'Giá gốc quá lớn';
+    if (d === '') e.discount_price = 'Nhập giá sau giảm';
+    else if (+d >= o) e.discount_price = 'Giá giảm phải thấp hơn giá gốc';
+    if (!area) e.area = 'Chọn khu vực';
+    if (f('address').value.trim().length < 3) e.address = 'Nhập địa chỉ quán';
+    if (!/^0\d{9}$/.test(normalizePhone(f('contact_phone').value))) e.contact_phone = 'Số điện thoại 10 số, ví dụ 0912345678';
+    if (expiryTouched) {
+      const x = expiresAt();
+      if (!x) e.expiry = 'Chọn giờ hết hiệu lực';
+      else if (x - now < MIN_EXPIRY_MIN * 60000) e.expiry = `Chọn giờ cách bây giờ ít nhất ${MIN_EXPIRY_MIN} phút`;
+    }
+    return e;
+  }
+
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const errs = validate();
+    $$('[data-err]', form).forEach((p) => (p.textContent = errs[p.dataset.err] || ''));
+    const errBox = $('[data-submit-error]', form);
+    errBox.hidden = true;
+    if (Object.keys(errs).length) {
+      $('[data-err]:not(:empty)', form).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    try {
+      onSubmit({
+        shop_name: f('shop_name').value.trim(),
+        dish_name: f('dish_name').value.trim(),
+        quantity: +f('quantity').value,
+        original_price: +f('original_price').value,
+        discount_price: +f('discount_price').value,
+        area,
+        address: f('address').value.trim(),
+        contact_phone: normalizePhone(f('contact_phone').value),
+        expires_at: expiresAt().toISOString(),
+      });
+    } catch (e) {
+      errBox.textContent = friendlyError(e);
+      errBox.hidden = false;
+    }
+  });
+}
+
+// ================= Trang đăng tin =================
+function renderPost() {
+  app.innerHTML = `
+    <div class="page narrow">
+      <div class="page-head">
+        <h1>Đăng đồ ăn dư 🍱</h1>
+        <p>Miễn phí, không cần tài khoản. Tin tự ẩn khi hết giờ.</p>
+      </div>
+      <div class="card">${formHTML(null, '🚀 Đăng tin')}</div>
+    </div>`;
+  bindForm($('form', app), null, (input) => {
+    const code = api.create(input);
+    renderPostSuccess(code, input);
+  });
+}
+
+function renderPostSuccess(code, input) {
+  const manageUrl = `${location.origin}${location.pathname}#/quan-ly?ma=${code}`;
+  app.innerHTML = `
+    <div class="page narrow">
+      <div class="card success">
+        <div class="success-emoji">🎉</div>
+        <h1>Đăng tin thành công!</h1>
+        <p><b>${esc(input.dish_name)}</b> của <b>${esc(input.shop_name)}</b> đã lên sóng. Sinh viên đang tới đây!</p>
+        <div class="code-box">
+          <span class="code-label">Mã quản lý tin</span>
+          <span class="code">${displayCode(code)}</span>
+          <button class="btn btn-sm" data-copy="${displayCode(code)}">Chép mã</button>
+        </div>
+        <p class="alert alert-warn">⚠️ <b>Lưu lại mã này</b> (chụp màn hình hoặc chép link bên dưới). Bạn cần mã để sửa số lượng, báo hết hàng hoặc xóa tin.</p>
+        <div class="stack">
+          <button class="btn btn-block" data-copy="${esc(manageUrl)}">📋 Chép link quản lý tin</button>
+          <a class="btn btn-primary btn-block" href="#/quan-ly?ma=${code}">Quản lý tin này</a>
+          <button class="btn btn-block" data-again>Đăng thêm món khác</button>
+          <a class="btn btn-link" href="#/">Xem trang chủ →</a>
+        </div>
+      </div>
+    </div>`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  bindCopy();
+  $('[data-again]').onclick = renderPost;
+}
+
+function bindCopy() {
+  $$('[data-copy]').forEach((b) => b.onclick = async () => {
+    const label = b.textContent;
+    if (await copyText(b.dataset.copy)) {
+      b.textContent = '✅ Đã chép!';
+      setTimeout(() => (b.textContent = label), 2000);
+    }
+  });
+}
+
+// ================= Trang quản lý tin =================
+function renderEnterCode() {
+  const mine = readStore().slice().reverse();
+  app.innerHTML = `
+    <div class="page narrow">
+      <div class="page-head">
+        <h1>Quản lý tin đăng 🔑</h1>
+        <p>Nhập mã quản lý bạn nhận được khi đăng tin.</p>
+      </div>
+      <form class="card form" data-code-form>
+        <label class="field"><span>Mã quản lý</span>
+          <input class="code-input" name="code" placeholder="ABCD-2345" autocapitalize="characters" autocomplete="off"></label>
+        <button class="btn btn-primary btn-block" type="submit">Mở tin</button>
+      </form>
+      ${mine.length ? `
+        <div class="card">
+          <h2 class="h2">Tin đã đăng trên máy này</h2>
+          <ul class="saved-list">
+            ${mine.map((l) => `<li><a href="#/quan-ly?ma=${l.code}"><b>${esc(l.dish_name)}</b> · ${esc(l.shop_name)}
+              <small>${displayCode(l.code)} · ${new Date(l.created_at).toLocaleString('vi-VN')}</small></a></li>`).join('')}
+          </ul>
+        </div>` : ''}
+    </div>`;
+  $('[data-code-form]').onsubmit = (e) => {
+    e.preventDefault();
+    const c = normalizeCode(e.target.elements.code.value);
+    if (c) location.hash = '#/quan-ly?ma=' + c;
+  };
+}
+
+function renderManage(code, message = '') {
+  const l = api.get(code);
+  if (!l) {
+    app.innerHTML = `
+      <div class="page narrow"><div class="card empty">
+        <div class="empty-emoji">🤔</div>
+        <p class="empty-title">Không tìm thấy tin</p>
+        <p>Mã không đúng, hoặc tin đã bị xóa. Lưu ý: ở bản demo, tin chỉ quản lý được trên máy đã đăng.</p>
+        <div class="stack">
+          <a class="btn btn-primary" href="#/dang-tin">Đăng tin mới</a>
+          <a class="btn" href="#/quan-ly">Nhập mã khác</a>
+        </div>
+      </div></div>`;
+    return;
+  }
+  const now = new Date();
+  const exp = new Date(l.expires_at);
+  const [cls, text] = exp <= now ? ['status-off', 'Đã hết hạn · không hiển thị']
+    : l.quantity === 0 ? ['status-off', 'Đã bán hết · không hiển thị']
+    : ['status-on', `Đang hiển thị · đến ${formatClock(exp)} ${dayLabel(exp, now)}`];
+
+  app.innerHTML = `
+    <div class="page narrow">
+      <div class="page-head">
+        <h1>${esc(l.dish_name)}</h1>
+        <p>🏪 ${esc(l.shop_name)} · Mã <b>${displayCode(code)}</b></p>
+        <span class="status ${cls}">${text}</span>
+      </div>
+      ${message ? `<p class="alert alert-info">${message}</p>` : ''}
+      <div class="card quick-actions">
+        <button class="btn btn-sun btn-block" data-soldout ${l.quantity === 0 ? 'disabled' : ''}>🙌 Đã bán hết</button>
+        <button class="btn btn-danger btn-block" data-delete>🗑️ Xóa tin</button>
+      </div>
+      <div class="card">
+        <h2 class="h2">Sửa tin</h2>
+        ${formHTML(l, '💾 Lưu thay đổi')}
+      </div>
+    </div>`;
+
+  $('[data-soldout]').onclick = () => {
+    api.update(code, { quantity: 0, expires_at: l.expires_at });
+    renderManage(code, '✅ Đã báo hết hàng, tin đã ẩn khỏi trang chủ. Cảm ơn quán đã chung tay chống lãng phí!');
+  };
+  $('[data-delete]').onclick = () => {
+    if (!confirm('Xóa hẳn tin này? Không khôi phục được đâu nhé.')) return;
+    api.remove(code);
+    app.innerHTML = `
+      <div class="page narrow"><div class="card empty">
+        <div class="empty-emoji">🗑️</div>
+        <p class="empty-title">Đã xóa tin</p>
+        <p>Tin đã được gỡ khỏi ĂN HẾT.</p>
+        <div class="stack"><a class="btn btn-primary" href="#/dang-tin">Đăng tin mới</a></div>
+      </div></div>`;
+  };
+  bindForm($('form', app), l, (input) => {
+    api.update(code, input);
+    renderManage(code, '✅ Đã lưu thay đổi!');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ================= Điều hướng =================
+const app = document.getElementById('app');
+
+function route() {
+  const hash = location.hash.slice(1) || '/';
+  const [path, query = ''] = hash.split('?');
+  const nav = path === '/dang-tin' ? 'post' : path === '/quan-ly' ? 'manage' : 'home';
+  $$('[data-nav]').forEach((a) => a.classList.toggle('active', a.dataset.nav === nav));
+
+  if (nav === 'post') renderPost();
+  else if (nav === 'manage') {
+    const code = normalizeCode(new URLSearchParams(query).get('ma') || '');
+    code ? renderManage(code) : renderEnterCode();
+  } else renderHome();
+  window.scrollTo(0, 0);
+}
+
+// Trang chủ: cập nhật đếm ngược và tự ẩn tin hết giờ mỗi 15 giây
+const onHome = () => !['/dang-tin', '/quan-ly'].includes((location.hash.slice(1) || '/').split('?')[0]);
+setInterval(() => onHome() && renderHome(), 15000);
+
+// Tin đăng ở tab khác trên cùng máy cũng hiện ngay
+window.addEventListener('storage', (e) => { if (e.key === STORE_KEY && onHome()) renderHome(); });
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
 </html>
